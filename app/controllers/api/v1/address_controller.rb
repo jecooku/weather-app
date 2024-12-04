@@ -2,14 +2,9 @@ module Api
   module V1
     class AddressController < ApplicationController
       def index
-        key = Digest::SHA256.hexdigest(address_params[:input])
+        response = ::Api::AddressService.call(address_params)
 
-        cached = Rails.cache.fetch(key).present?
-        response = Rails.cache.fetch(key, expires_in: 30.minute) do
-          ::HttpClients::AddressClient.get_address_suggestion(params[:input])
-        end
-          response = { data: response.body.force_encoding("UTF-8"), cached: cached }
-          render json: response
+        render json: response, status: response.code
       end
 
       def address_params
