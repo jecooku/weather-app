@@ -1,17 +1,14 @@
 # Use the official Ruby image as a base image
-FROM ruby:3.0.7-alpine
+FROM ruby:3.0.7
 
-# Install production dependencies, including jemalloc, Node.js, and essential libraries
-RUN apk add --no-cache \
-    build-base \
-    libxml2-dev \
-    libxslt-dev \
-    postgresql-dev \
+# Install dependencies, including jemalloc, Redis tools, and nodejs/npm
+RUN apt-get update && \
+    apt-get install -y \
     curl \
-    redis \
-    nodejs \
-    npm \
-    && rm -rf /var/cache/apk/*
+    gnupg2 \
+    redis-tools \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install jemalloc
 RUN curl -L https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 | tar -xj && \
@@ -23,33 +20,34 @@ RUN curl -L https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemallo
 # Update the shared library cache
 RUN ldconfig
 
+# Install Node.js (latest LTS) and npm
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs
+
 # Set the working directory in the container
 WORKDIR /app
 
 # Install Bundler and Rails Gems
 COPY Gemfile Gemfile.lock ./
-RUN gem install bundler && bundle install --without development test
+RUN gem install bundler && bundle install
 
 # Install npm dependencies for the React app
 COPY ui/package.json ui/package-lock.json ./ui/
 WORKDIR /app/ui
-RUN npm install --production
+RUN npm install
 
-# Precompile Rails assets for production
+# Copy the rest of the Rails app code into the container
 WORKDIR /app
-RUN RAILS_ENV=production bundle exec rake assets:precompile
+COPY . .
 
-# Remove any development-specific files (e.g., server.pid)
-RUN rm -f tmp/pids/server.pid
-
-# Expose the Rails app and React app ports
+# Expose the Rails app port and React app port
 EXPOSE 3000 3001
+
+# Remove the server.pid file if it exists before starting Rails
+RUN rm -f tmp/pids/server.pid
 
 # Set environment variables to use jemalloc as the memory allocator
 ENV LD_PRELOAD=/usr/local/lib/libjemalloc.so
 
-# Set the default environment for Rails
-ENV RAILS_ENV=production
-
-# Use a shell command to remove server.pid and start the Rails server
+# Use a shell command to remove server.pid and then start Rails server
 ENTRYPOINT ["sh", "-c", "rm -f tmp/pids/server.pid && bundle exec rails server -b '0.0.0.0'"]

@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  rails-api:
+    build:
+      context: .
+      dockerfile: dev.dockerfile # Path to the Rails Dockerfile
+    volumes:
+      - .:/app # Mount the local directory (containing Gemfile and all Rails app files)
+      - /app/gems # Persist gems between container restarts
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env # Load the .env file at runtime
+    environment:
+      - RAILS_ENV=development
+      - REDIS_URL=redis://redis:6379/0 # Redis URL
+    depends_on:
+      - redis
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+
+  react-frontend:
+    build:
+      context: .
+      dockerfile: ui/dev.dockerfile # Path to the React Dockerfile
+    volumes:
+      - ./ui:/app # Mount the local UI directory
+    ports:
+      - "3001:3001" # React typically runs on 3000, map it to 3001
+    env_file:
+      - .env # Load the .env file at runtime (if necessary)
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - rails-api # Ensure Rails API is available for any API calls from React
+
+volumes:
+  redis-data:
