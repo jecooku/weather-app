@@ -3,17 +3,9 @@ module Api
     class WeatherController < ApplicationController
 
       def forecast
-        lat, long = weather_params[:address].split(',').map(&:to_f)
-        key = ::GeoHash.new(lat, long).value.to_s
+        response = ::Api::WeatherService.call(weather_params)
 
-        cached = Rails.cache.fetch(key).present?
-        response = Rails.cache.fetch(key, expires_in: 30.minute) do
-          ::HttpClients::WeatherClient.get_weather_by_address(params[:address], days:5)
-        end
-
-        response = { data: response.body.force_encoding("UTF-8"), cached: cached }
-
-        render json: response
+        render json: response, status: response.code
       end
 
       def weather_params
