@@ -14,6 +14,8 @@ export async function loader({ params }) {
 function Weather() {
   const { weather, cache } = useLoaderData();
 
+  console.log(cache);
+
   return (
     <section className="">
       {weather.current && (

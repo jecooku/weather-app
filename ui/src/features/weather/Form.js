@@ -62,15 +62,15 @@ export default function Form() {
                 setSuggestions([]);
               }, 100);
             }}
-            className="border-2 border-solid border-stone-500 bg-yellow-100 px-4 py-2 text-sm placeholder:stroke-stone-400 focus:outline-none focus:ring focus:ring-yellow-500 sm:w-[350px]"
+            className="border-2 border-solid border-stone-500 bg-sky-100 px-4 py-2 text-sm placeholder:stroke-stone-400 focus:outline-none focus:ring focus:ring-sky-500 sm:w-[350px]"
           />
           <div className="absolute">
             {suggestions &&
               suggestions.map((prediction) => (
                 <div
-                  className="cursor-pointer border-b-2 border-l-2 border-r-2 border-solid border-stone-500 bg-yellow-100 px-4 py-2 text-sm lowercase placeholder:stroke-stone-400 focus:outline-none focus:ring focus:ring-yellow-500 sm:w-[350px]"
+                  className="cursor-pointer border-b-2 border-l-2 border-r-2 border-solid border-stone-500 bg-sky-100 px-4 py-2 text-sm lowercase placeholder:stroke-stone-400 focus:outline-none focus:ring focus:ring-sky-500 sm:w-[350px]"
                   key={prediction.id}
-                  onClick={(e) => handleSelect(prediction)}
+                  onClick={() => handleSelect(prediction)}
                 >
                   {prediction.place_name}
                 </div>
@@ -78,7 +78,7 @@ export default function Form() {
           </div>
         </div>
         <div>
-          <button className="inline-block rounded-full bg-yellow-400 px-4 py-3 font-semibold uppercase tracking-wide text-stone-800 transition-colors duration-300 hover:bg-yellow-300">
+          <button className="inline-block rounded-full bg-sky-300 px-4 py-3 font-semibold uppercase tracking-wide text-stone-800 transition-colors duration-300 hover:bg-sky-200">
             Get Weather
           </button>
         </div>

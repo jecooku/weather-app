@@ -4,7 +4,7 @@ function Forecast({ weather }) {
   return (
     <div className="flex border-spacing-px flex-col items-center justify-between space-x-5 p-4">
       <div
-        className="rounded-md border-2 border-solid bg-yellow-100 p-4 px-[27px]"
+        className="rounded-md border-2 border-solid bg-sky-50 p-4 px-[27px]"
         style={{ flex: 1 }}
       >
         <div className="border-b-2">Today's Forecast</div>

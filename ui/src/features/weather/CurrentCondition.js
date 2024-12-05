@@ -1,11 +1,15 @@
 import moment from 'moment';
 import { thermometerIcon } from './Icons';
 
-function CurrentCondition({ weather, children }) {
+function CurrentCondition({ weather, children, totalItems }) {
+  const widthPercentage = totalItems <= 6 ? 100 / totalItems : 25; // Dynamically calculate width
   return (
-    <div className="flex flex-[1_0_25%] border-spacing-px flex-col items-center justify-between space-x-5 p-4">
+    <div
+      className="flex border-spacing-px flex-col items-center justify-between space-x-5 p-4"
+      style={{ flex: `1 0 ${widthPercentage}%` }}
+    >
       <div
-        className="w-55 rounded-md border-2 border-solid bg-yellow-100 p-4 md:w-[186px]"
+        className="w-55 rounded-md border-2 border-solid bg-sky-50 p-4 md:w-[186px]"
         style={{ flex: 1 }}
       >
         <div className="border-b-2">{children}</div>

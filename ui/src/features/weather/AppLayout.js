@@ -5,8 +5,8 @@ function AppLayout() {
   return (
     <div className="App" style={{ height: 100 }}>
       <Header />
-      <main className="bg-yellow-50 tracking-wide">
-        <h1 className="my-8 text-center text-xl font-semibold">
+      <main className="bg-sky-100 tracking-wide">
+        <h1 className="py-8 text-center text-xl font-semibold">
           Weather Information for a given location
         </h1>
         <Outlet />
