@@ -68,9 +68,11 @@ export default function Form() {
             {suggestions &&
               suggestions.map((prediction) => (
                 <div
-                  className="cursor-pointer border-b-2 border-l-2 border-r-2 border-solid border-stone-500 bg-sky-100 px-4 py-2 text-sm lowercase placeholder:stroke-stone-400 focus:outline-none focus:ring focus:ring-sky-500 sm:w-[350px]"
+                  className="cursor-pointer border-b-2 border-l-2 border-r-2 border-solid border-stone-500 bg-sky-100 px-4 py-2 text-sm placeholder:stroke-stone-400 focus:outline-none focus:ring focus:ring-sky-500 sm:w-[350px]"
                   key={prediction.id}
-                  onClick={() => handleSelect(prediction)}
+                  onClick={() => {
+                    handleSelect(prediction);
+                  }}
                 >
                   {prediction.place_name}
                 </div>

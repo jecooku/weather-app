@@ -19,7 +19,7 @@ function Weather() {
   return (
     <section className="">
       {weather.current && (
-        <div className="font-semibold">
+        <div className="h-lvh font-semibold">
           <div className={cache ? 'mb-4 bg-green-500' : ''}>
             {cache ? 'Cached' : ''}
           </div>
