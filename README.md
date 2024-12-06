@@ -15,6 +15,20 @@ https://github.com/user-attachments/assets/ecba0a96-df26-4730-8145-f30475c18d20
 
 To run the App:
 
+Prerequisites:
+
+***ENV variables***
+- create a `.env` file at the root of the project
+- create two `ENV` variables
+  - WEATHER_API_TOKEN
+  - ADDRESS_API_TOKEN
+- The values will be provided in the submission email
+
+***Node modules***
+- run `docker-compose run react-frontend sh`
+- type `ls -la` and check for `node_modules`
+- if they are missing, run `npm install`
+
 1. run `docker-compose build`
 2. run `docker-compose up` to start the app
 3. run `docker-compose down` to stop the container
@@ -23,18 +37,12 @@ To run the App:
 
 **Troubleshooting**
 
-If when you go to http://localhost:3001/ you see a blank page, then you are most likely missing the `node_modules`.
+If you go to http://localhost:3001/ and see nothing, you are most likely missing the `node_modules`.
+- Follow the Prerequisites section above OR
 - with the code cloned, nagivate to the main folder of the app
 - to go `cd ui/`
-- type `npm start` to produce the `node_modules`
+- type `npm install` to produce the `node_modules`
 - after completion, run the initial [Instructions](#instructions) listed 
-
-If you are not getting a response from the Address or the weather API
-- create a `.env` file at the root of the project
-- create two `ENV` variables
-  - WEATHER_API_TOKEN
-  - ADDRESS_API_TOKEN
-- The values will be provided in the submission email
 
 To run tests:
 1. `docker-compose -f docker-compose.test.yml build`
