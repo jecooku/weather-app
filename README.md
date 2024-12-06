@@ -5,18 +5,24 @@
 The following app is a web based weather forecasting service. It returns the weather information of location selected
 from the text input dropdown.
 
-** Instructions **
+**Instructions**
+
+To run the App:
 1. run `docker-compose build`
 2. run `docker-compose up` to start the app
 3. run `docker-compose down` to stop the container
 4. run `docker exec -it <container-name> /bin/bash` to enter the container's console
 5. To access the app, go to http://localhost:3001/
 
+To run tests:
+1. docker-compose -f docker-compose.test.yml build
+2. docker-compose -f docker-compose.test.yml up
+
 **User flow**
 
-1. User enters the app and is greated by a welcome screen
+1. User enters the app and is greeted by a welcome screen
 2. User begins to enter an address
-3. The App shows suggestion which grow in accurancy as the user enters more details
+3. The App shows suggestion which grow in accuracy as the user enters more details
 4. The user selects an item from the selection dropdown
 5. The users click on `GET WEATHER`
 6. The app displays the weather information for the selected address
@@ -87,5 +93,3 @@ The following items are out of the scope of this assignment:
    - UI data types
    - Advanced logging
    - Error and performance monitoring
-   - Advanced responsive design
-
