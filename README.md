@@ -5,14 +5,32 @@
 The following app is a web based weather forecasting service. It returns the weather information of location selected
 from the text input dropdown.
 
-**Instructions**
+
+
+### Instructions
 
 To run the App:
+
 1. run `docker-compose build`
 2. run `docker-compose up` to start the app
 3. run `docker-compose down` to stop the container
 4. run `docker exec -it <container-name> /bin/bash` to enter the container's console
 5. To access the app, go to http://localhost:3001/
+
+**Troubleshooting**
+
+If when you go to http://localhost:3001/ you see a blank page, then you are most likely missing the `node_modules`.
+- with the code cloned, nagivate to the main folder of the app
+- to go `cd ui/`
+- type `npm start` to produce the `node_modules`
+- after completion, run the initial [Instructions](#instructions) listed 
+
+If you are not getting a response from the Address or the weather API
+- create a `.env` file at the root of the project
+- create two `ENV` variables
+  - WEATHER_API_TOKEN
+  - ADDRESS_API_TOKEN
+- The values will be provided in the submission email
 
 To run tests:
 1. docker-compose -f docker-compose.test.yml build
@@ -38,8 +56,8 @@ N.B. Once an address is visited for the first time, the result is cached as per 
   - Tailwind CSS
   - React router dom
 
-
-<summary>API details
+<details>
+    <summary>API details</summary>
 
 1. **Address suggestions endpoint**
    - **GET**: `/api/v1/address/{input}` 
@@ -59,7 +77,8 @@ N.B. Once an address is visited for the first time, the result is cached as per 
             - Required: true
             - Type: string
             - Format (`latitude, longitude`): `45.50283,-73.5728`
-</summary>
+
+</details>
 
 **Assignment requirements**
 
