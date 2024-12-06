@@ -4,7 +4,7 @@ describe GeoHash do
 
   describe '#initialize' do
     it 'should create a new GeoHash object' do
-      GeoHash.new('17.0000', '85.0000').should be_an_instance_of GeoHash
+      expect(GeoHash.new('17.0000', '85.0000')).to be_an_instance_of GeoHash
     end
 
     it 'should create a new hash key' do

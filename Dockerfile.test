@@ -1,0 +1,37 @@
+# Use the official Ruby image as a base image
+FROM ruby:3.0.7
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    curl gnupg2 build-essential && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install jemalloc
+RUN curl -L https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 | tar -xj && \
+    cd jemalloc-5.2.1 && \
+    ./configure && \
+    make && \
+    make install
+
+# Update the shared library cache
+RUN ldconfig
+
+# Set the working directory
+WORKDIR /app
+
+# Install Bundler and Rails Gems
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler && bundle install
+
+# Copy the app
+COPY . .
+
+# Environment setup
+ENV LD_PRELOAD=/usr/local/lib/libjemalloc.so
+ENV RAILS_ENV=test
+
+# Ensure server.pid doesn't block container execution
+RUN rm -f tmp/pids/server.pid
+
+# Default entrypoint
+ENTRYPOINT ["bundle", "exec"]

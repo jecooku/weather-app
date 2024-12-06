@@ -23,7 +23,7 @@ function Weather() {
           <div className={cache ? 'mb-4 bg-green-500' : ''}>
             {cache ? 'Cached' : ''}
           </div>
-          <div className="m-auto grid w-1/2 grid-cols-1 md:grid-cols-3">
+          <div className="m-auto grid w-1/2 xl:grid-cols-3">
             <Location weather={weather} />
             <CurrentCondition weather={weather.current}>
               Current conditions

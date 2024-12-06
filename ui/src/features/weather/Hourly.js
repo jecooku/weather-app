@@ -13,7 +13,7 @@ function Hourly({ weather }) {
   return (
     <div className="">
       <div className="">Hourly Forecast</div>
-      <div className="m-auto flex flex-wrap items-center justify-center md:w-[1200px]">
+      <div className="m-auto flex flex-wrap items-center justify-center xl:w-[1200px]">
         {hourlyData.map((dailyForecast) => (
           <CurrentCondition
             weather={dailyForecast}
