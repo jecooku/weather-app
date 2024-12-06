@@ -37,8 +37,8 @@ If you are not getting a response from the Address or the weather API
 - The values will be provided in the submission email
 
 To run tests:
-1. docker-compose -f docker-compose.test.yml build
-2. docker-compose -f docker-compose.test.yml up
+1. `docker-compose -f docker-compose.test.yml build`
+2. `docker-compose -f docker-compose.test.yml up`
 
 **User flow**
 
