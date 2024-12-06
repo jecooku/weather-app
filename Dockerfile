@@ -1,59 +1,55 @@
-# syntax = docker/dockerfile:1
+# Use the official Ruby image as a base image
+FROM ruby:3.0.7-alpine
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.0.7
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+# Install production dependencies, including jemalloc, Node.js, and essential libraries
+RUN apk add --no-cache \
+    build-base \
+    libxml2-dev \
+    libxslt-dev \
+    postgresql-dev \
+    curl \
+    redis \
+    nodejs \
+    npm \
+    && rm -rf /var/cache/apk/*
 
-# Rails app lives here
-WORKDIR /rails
+# Install jemalloc
+RUN curl -L https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 | tar -xj && \
+    cd jemalloc-5.2.1 && \
+    ./configure && \
+    make && \
+    make install
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+# Update the shared library cache
+RUN ldconfig
 
+# Set the working directory in the container
+WORKDIR /app
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
-
-# Install application gems
+# Install Bundler and Rails Gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+RUN gem install bundler && bundle install --without development test
 
-# Copy application code
-COPY . .
+# Install npm dependencies for the React app
+COPY ui/package.json ui/package-lock.json ./ui/
+WORKDIR /app/ui
+RUN npm install --production
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Precompile Rails assets for production
+WORKDIR /app
+RUN RAILS_ENV=production bundle exec rake assets:precompile
 
+# Remove any development-specific files (e.g., server.pid)
+RUN rm -f tmp/pids/server.pid
 
-# Final stage for app image
-FROM base
+# Expose the Rails app and React app ports
+EXPOSE 3000 3001
 
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# Set environment variables to use jemalloc as the memory allocator
+ENV LD_PRELOAD=/usr/local/lib/libjemalloc.so
 
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
+# Set the default environment for Rails
+ENV RAILS_ENV=production
 
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails:rails
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
+# Use a shell command to remove server.pid and start the Rails server
+ENTRYPOINT ["sh", "-c", "rm -f tmp/pids/server.pid && bundle exec rails server -b '0.0.0.0'"]

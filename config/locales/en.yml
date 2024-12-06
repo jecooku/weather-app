@@ -29,3 +29,10 @@
 
 en:
   hello: "Hello world"
+  errors:
+    bad_request: "Bad Request"
+    token_expired: "Token expired"
+    token_invalid: "Access Token invalid or with insufficient capacity"
+    generic: 'An error has occurred'
+    not_found: 'Resource not found'
+    rate_limited: 'Rate limit exceeded'

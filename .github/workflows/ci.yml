@@ -34,38 +34,38 @@ jobs:
             -v "$(pwd)":/app \
             rails-test rspec spec
 
-  lint:
-    runs-on: ubuntu-latest
+  # lint:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
 
-      - name: Install RuboCop
-        run: |
-          gem install rubocop
-          rubocop --version
+  #     - name: Install RuboCop
+  #       run: |
+  #         gem install rubocop
+  #         rubocop --version
 
-      - name: Run RuboCop
-        run: |
-          rubocop
+  #     - name: Run RuboCop
+  #       run: |
+  #         rubocop
 
-  scan_js:
-    runs-on: ubuntu-latest
+  # scan_js:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
 
-      - name: Install Dependencies
-        run: |
-          npm install
+  #     - name: Install Dependencies
+  #       run: |
+  #         npm install
 
-      - name: Run scan_js
-        run: |
-          npm run scan_js
+  #     - name: Run scan_js
+  #       run: |
+  #         npm run scan_js

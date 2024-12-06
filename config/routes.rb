@@ -7,4 +7,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  namespace :api do
+    namespace :v1 do
+      resources :weather, only: []
+      resources :address, only: [:index]
+    end
+  end
+
+  match 'api/v1/weather/forecast' => 'api/v1/weather#forecast', :via => :get
 end

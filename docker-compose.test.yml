@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  rails-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test  # Use the test Dockerfile
+    volumes:
+      - .:/app
+      - /app/gems
+    env_file:
+      - .env.test
+    environment:
+      - RAILS_ENV=test
+    command: ["rspec", "spec"]
